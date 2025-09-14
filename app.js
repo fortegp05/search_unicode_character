@@ -96,7 +96,6 @@ async function init() {
   // Composer / Copy UI (Phase 6)
   const composeBox = document.getElementById('compose-box');
   const selectedNameInput = document.getElementById('selected-name');
-  const btnCopyName = document.getElementById('btn-copy-name');
   const btnCopyAll = document.getElementById('btn-copy-all');
   const btnClear = document.getElementById('btn-clear');
   const toastEl = document.getElementById('toast');
@@ -121,11 +120,11 @@ async function init() {
     const scripts = await loadScripts();
     buildQuickChips(quickChips, scripts, selectedNameInput, grid, displayableRanges);
 
-    // Phase 5: Random display wiring
-    wireRandomSection({ scripts, displayableRanges, randOneBtn, randManyBtn });
+    // Phase 5: Random display wiring (+ append to composer)
+    wireRandomSection({ scripts, displayableRanges, randOneBtn, randManyBtn, composeBox, toastEl });
 
     // Phase 6: Copy interactions (single + bulk)
-    wireCopyInteractions({ scripts, grid, composeBox, selectedNameInput, btnCopyName, btnCopyAll, btnClear, toastEl });
+    wireCopyInteractions({ scripts, grid, composeBox, selectedNameInput, btnCopyAll, btnClear, toastEl });
   } catch (e) {
     // On failure, show minimal message
     // swallow; minimal UI can operate without category list
@@ -325,14 +324,20 @@ function renderRandomResult(container, cps) {
   container.appendChild(frag);
 }
 
-function wireRandomSection({ scripts, displayableRanges, randOneBtn, randManyBtn }) {
+function wireRandomSection({ scripts, displayableRanges, randOneBtn, randManyBtn, composeBox, toastEl }) {
   const resultEl = document.getElementById('random-result');
 
   randOneBtn?.addEventListener('click', () => {
     // Phase 12: single pick from ALL
     const scope = getAllArray({ scripts, displayableRanges });
     const cp = pickOne(scope);
-    renderRandomResult(resultEl, typeof cp === 'number' ? [cp] : []);
+    const arr = typeof cp === 'number' ? [cp] : [];
+    renderRandomResult(resultEl, arr);
+    if (arr.length) {
+      appendToComposer(composeBox, toGlyph(arr[0]));
+      try { composeBox?.focus(); } catch {}
+      showToast?.(toastEl, '1文字を追加しました', { kind: 'success' });
+    }
   });
 
   randManyBtn?.addEventListener('click', () => {
@@ -341,7 +346,14 @@ function wireRandomSection({ scripts, displayableRanges, randOneBtn, randManyBtn
     // Pick count as a random integer between 2 and 10 inclusive
     const n = 2 + randInt(9);
     const picks = pickMany(scope, n, { allowDuplicates: true });
-    renderRandomResult(resultEl, picks.filter(x => typeof x === 'number'));
+    const arr = picks.filter(x => typeof x === 'number');
+    renderRandomResult(resultEl, arr);
+    if (arr.length) {
+      const text = arr.map((cp) => toGlyph(cp)).join('');
+      appendToComposer(composeBox, text);
+      try { composeBox?.focus(); } catch {}
+      showToast?.(toastEl, `${arr.length}文字を追加しました`, { kind: 'success' });
+    }
   });
 }
 
@@ -388,7 +400,7 @@ function getCategoryLabelForCodePoint(cp, scripts) {
   return null;
 }
 
-function wireCopyInteractions({ scripts, grid, composeBox, selectedNameInput, btnCopyName, btnCopyAll, btnClear, toastEl }) {
+function wireCopyInteractions({ scripts, grid, composeBox, selectedNameInput, btnCopyAll, btnClear, toastEl }) {
   // Activate a cell to append + copy single glyph
   function activateCell(btn) {
     const glyph = btn?.querySelector('.glyph')?.textContent || '';
@@ -470,28 +482,7 @@ function wireCopyInteractions({ scripts, grid, composeBox, selectedNameInput, bt
     }
   });
 
-  // Copy selected name
-  btnCopyName?.addEventListener('click', async () => {
-    const text = selectedNameInput?.textContent || '';
-    if (!text) {
-      showToast(toastEl, 'コピー対象の名前がありません', { kind: 'info' });
-      return;
-    }
-    const ok = await copyText(text);
-    if (ok) showToast(toastEl, '文字名をコピーしました', { kind: 'success' });
-    else {
-      try {
-        if (selectedNameInput) {
-          const range = document.createRange();
-          range.selectNodeContents(selectedNameInput);
-          const sel = window.getSelection();
-          sel?.removeAllRanges();
-          sel?.addRange(range);
-        }
-      } catch {}
-      showToast(toastEl, 'コピーできませんでした。選択しました→ Ctrl/Cmd + C', { kind: 'info', timeout: 3500 });
-    }
-  });
+  // (Removed) Copy selected name button handler
 
   // Clear
   btnClear?.addEventListener('click', () => {

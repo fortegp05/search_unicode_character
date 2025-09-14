@@ -124,6 +124,7 @@ footer small { color: var(--muted); }
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  flex-wrap: wrap;
 }
 .namebox {
   min-width: 240px;
@@ -131,6 +132,7 @@ footer small { color: var(--muted); }
   color: var(--fg);
   display: inline-block;
   user-select: text;
+  overflow-wrap: anywhere;
 }
 .textbox {
   flex: 1;
@@ -142,6 +144,7 @@ footer small { color: var(--muted); }
   color: var(--fg);
   resize: vertical;
 }
+.compose-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -187,8 +190,8 @@ footer small { color: var(--muted); }
 /* Bottom-right credit link */
 #credit-forte {
   position: fixed;
-  right: 16px;
-  bottom: 16px;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
   padding: 6px 10px;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -198,3 +201,37 @@ footer small { color: var(--muted); }
   box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 #credit-forte:hover { background: color-mix(in oklab, var(--bg) 88%, var(--fg)); }
+
+/* ===================== */
+/*   Mobile adjustments  */
+/* ===================== */
+@media (max-width: 640px) {
+  header, footer { padding: var(--space-4) var(--space-3); }
+  main { padding: var(--space-3); }
+
+  /* Prevent overlapping sticky bars on small screens */
+  .notice { position: static; overflow-wrap: anywhere; }
+  .sticky-ops { top: 0; padding: var(--space-2) var(--space-3); }
+
+  /* Stack operation rows vertically */
+  .ops-row { grid-template-columns: 1fr; gap: var(--space-2); }
+
+  /* Stack composer controls and make fields full-width */
+  .compose-controls { flex-direction: column; align-items: stretch; }
+  .namebox { min-width: 0; width: 100%; }
+  .textbox { width: 100%; }
+  .compose-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+
+  /* Tighter buttons on mobile */
+  .btn { padding: 8px 10px; border-radius: 10px; }
+
+  /* Denser grid on small screens */
+  .grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: var(--space-2); }
+  .glyph { font-size: 24px; }
+
+  /* Chips wrap is already enabled; add slight size tweak */
+  .chip { font-size: 0.85rem; padding: var(--space-1) var(--space-2); }
+
+  /* Ensure credit link doesn’t obscure content too much */
+  #credit-forte { padding: 4px 8px; font-size: 12px; opacity: 0.9; }
+}
