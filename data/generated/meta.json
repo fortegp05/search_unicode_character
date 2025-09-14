@@ -1,0 +1,10 @@
+{
+  "unicodeVersion": "16.0.0",
+  "sources": [
+    "https://www.unicode.org/Public/16.0.0/ucd/Blocks.txt",
+    "https://www.unicode.org/Public/16.0.0/ucd/Scripts.txt",
+    "https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt"
+  ],
+  "excludeCategories": ["Cn", "Cs", "Cc"]
+}
+

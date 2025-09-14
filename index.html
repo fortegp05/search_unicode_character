@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>世界の文字ビューア</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header role="banner">
+      <h1>世界の文字ビューア</h1>
+      <div id="font-static-note" class="notice" role="note">
+        フォントが表示されない場合はご利用の端末に表示用フォントが存在しない可能性があるのでフォントをダウンロードするか、別の端末から見てください
+      </div>
+      <div id="sticky-ops" class="sticky-ops" role="region" aria-label="操作">
+        <div class="ops-row">
+          <div class="random-controls">
+            <button id="btn-random-one" class="btn" type="button" aria-label="ランダム一文字（全体から）">ランダム一文字</button>
+            <button id="btn-random-many" class="btn" type="button" aria-label="ランダム複数文字（全体から）">ランダム複数文字</button>
+          </div>
+        <div class="compose-controls">
+          <span id="selected-name" class="namebox" aria-label="選択した文字名"></span>
+          <textarea id="compose-box" class="textbox" rows="1" aria-label="選択中の文字" placeholder="選択した文字がここに追加されます"></textarea>
+          <div class="compose-actions">
+            <button id="btn-copy-name" class="btn" type="button" aria-label="文字名をコピー">名前をコピー</button>
+            <button id="btn-copy-all" class="btn" type="button" aria-label="まとめてコピー">まとめてコピー</button>
+            <button id="btn-clear" class="btn" type="button" aria-label="クリア">クリア</button>
+          </div>
+        </div>
+        </div>
+        <div id="random-result" class="grid" role="region" aria-live="polite"></div>
+      </div>
+
+      <h2 class="subheading" aria-label="文字選択の見出し">文字を選択してください</h2>
+      <div id="quick-chips" aria-label="カテゴリ一覧" role="toolbar"></div>
+    </header>
+
+    <main id="main" role="main">
+      <!-- カテゴリ一覧はチップに統合 -->
+
+      <section id="grid" aria-labelledby="grid-title">
+        <h2 id="grid-title">文字グリッド（コピーしたい文字を選択してください）</h2>
+        <div id="char-grid" class="grid" role="grid" aria-live="off"></div>
+      </section>
+
+      <!-- ランダム表示と選択中の文字は上部の固定バーに移動 -->
+    </main>
+
+    <div id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+    <footer role="contentinfo">
+      <small id="ucd-meta">UCD: 読み込み中...</small>
+    </footer>
+
+    <a id="credit-forte" href="https://fortegp05.net/" target="_blank" rel="noopener">Created by FORTE</a>
+
+    <script type="module" src="app.js"></script>
+  </body>
+  </html>

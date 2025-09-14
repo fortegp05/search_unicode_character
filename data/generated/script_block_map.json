@@ -1,0 +1,29 @@
+{
+  "hangul": [
+    "Hangul Jamo",
+    "Hangul Compatibility Jamo",
+    "Hangul Jamo Extended-A",
+    "Hangul Syllables",
+    "Hangul Jamo Extended-B"
+  ],
+  "cyrillic": [
+    "Cyrillic",
+    "Cyrillic Supplement",
+    "Cyrillic Extended-A",
+    "Cyrillic Extended-B",
+    "Cyrillic Extended-C",
+    "Cyrillic Extended-D"
+  ],
+  "egyptian": [
+    "Egyptian Hieroglyphs"
+  ],
+  "anatolian": [
+    "Anatolian Hieroglyphs"
+  ],
+  "cuneiform": [
+    "Cuneiform",
+    "Cuneiform Numbers and Punctuation",
+    "Early Dynastic Cuneiform"
+  ]
+}
+

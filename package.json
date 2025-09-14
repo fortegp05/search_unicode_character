@@ -1,0 +1,9 @@
+{
+  "name": "search-unicode",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node tools/dev_server.mjs --port 8080"
+  }
+}
+
